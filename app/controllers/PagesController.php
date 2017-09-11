@@ -1,13 +1,16 @@
 <?php 
 
 namespace App\Controllers;
+use App\Core\App;
 
 	class PagesController
 	{
 		public function index()
 		{
 			$title = "Gallery";
-			return view('home', ['title' => $title]);
+			$images = App::get('database')->selectAll('images');
+			return view('home', ['images' => $images ,'title' => $title]);
+
 		}
 		public function about()
 		{

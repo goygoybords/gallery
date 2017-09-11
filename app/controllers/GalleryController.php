@@ -8,63 +8,54 @@ use App\Core\App;
 	{
 		public function store()
 		{
-			
-			$target_dir = "/public/uploads/";
-			$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-			$uploadOk = 1;
-			$imageFileType = pathinfo($target_file,PATHINFO_EXTENSION);
+		    if(isset($_FILES['fileToUpload']))
+		    {
+		    	$errors= array();
+		      	$file_name = $_FILES['fileToUpload']['name'];
+		      	$file_size =$_FILES['fileToUpload']['size'];
+		      	$file_tmp  =$_FILES['fileToUpload']['tmp_name'];
+		      	$file_type =$_FILES['fileToUpload']['type'];
+		      	$file_ext = strtolower(end(explode('.',$_FILES['fileToUpload']['name'])));
+		     
+			    $image_info = getimagesize($file_tmp);
+				$image_width = $image_info[0];
+				$image_height = $image_info[1];
 
 
-			$file = $_FILES['fileToUpload']['name'];
-			$file_loc = $_FILES['fileToUpload']['tmp_name'];
-			$file_size = $_FILES['fileToUpload']['size'];
-			$file_type = $_FILES['fileToUpload']['type'];
-
-			$image_info = getimagesize($file_loc);
-			$image_width = $image_info[0];
-			$image_height = $image_info[1];
-
-			// Check if file already exists
-			if (file_exists($target_file)) {
-			    echo "Sorry, file already exists.";
-			    $uploadOk = 0;
-			}
-			// Check file size
-			if ($_FILES["fileToUpload"]["size"] > 500000) {
-			    echo "Sorry, your file is too large.";
-			    $uploadOk = 0;
-			}
-			// Allow certain file formats
-			if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" ) 
-			{
-			    echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-			    $uploadOk = 0;
-			}
-			// Check if $uploadOk is set to 0 by an error
-			if ($uploadOk == 0) 
-			{
-			    echo "Sorry, your file was not uploaded.";
-			// if everything is ok, try to upload file
-			} 
-			else 
-			{
-			    if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) 
-			    {
-			        echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
-			    } 
-			    else 
-			    {
-			        echo "Sorry, there was an error uploading your file.";
-			    }
-			}
-
-			// App::get('database')->insert('users', [
-			// 	'name' => $_POST['name']
-			// ]  );
-
-			//redirect('');
+		      	$expensions= array("jpeg","jpg","png");
+		      
+		      if(in_array($file_ext,$expensions)=== false)
+		      {
+		         $errors[]="extension not allowed, please choose a JPEG or PNG file.";
+		      }
+		      
+		      if($file_size > 2097152)
+		      {
+		         $errors[]='File size must be excately 2 MB';
+		      }
+		      
+		      if(empty($errors)==true)
+		      {
+		         if(move_uploaded_file($file_tmp,"public/uploads/".$file_name))
+		         {
+		         	$data = 
+		         	['filename'  => $file_name , 
+		         	 'filetype'  => $file_type , 
+		         	 'filesize'  => $file_size , 
+		         	 'width'     => $image_width,
+		         	 'height'    => $image_height,
+		         	 ];
+		         	
+		         	App::get('database')->insert('images', $data );
+		         	redirect('?upload=1');
+		         }
+		      }
+		      else
+		      {
+		         print_r($errors);
+		      }
+		   }
 		}
-		
 	} 
 
 ?>
