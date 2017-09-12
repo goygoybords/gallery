@@ -8,7 +8,8 @@
 			<?php if($_GET['upload'] == 1) echo "Images Uploaded";?>
 		</form>
 		<?php $count = 0; ?>
-		<table class="center">
+		<div class="containers">
+		<table class="images">
 			<tbody>
 				<tr>
 					<?php foreach ($images as $i): ?>
@@ -28,22 +29,29 @@
 							<?php 
 								$count++;
 								if($count == 10)
-								break;	
+									break;	
 							?>
 					<?php endif;	?>
 					<?php endforeach; ?>
 				</tr>
-				<tr>
-					
-				</tr>
-			
-				<tr>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
 			</tbody>
 		</table>
+		</div>
+		<input type="hidden" id = "last-id" value="<?php echo $count;?>">
+		<div class="test">
+			<tr>
+					<?php $total = $count + 5; foreach ($images as $k => $v): ?>
+					<?php if ($k > $count - 1): ?>
+							<td><img src="/public/uploads/<?php echo $v->filename; ?>"></td>	
+
+							<?php 
+								$count++;
+								if($count == $total)
+									break;	
+							?>
+					<?php endif;	?>
+					<?php endforeach; ?>
+				</tr>
+		</div>
 	</div>
 <?php require('partials/footer.php'); ?>

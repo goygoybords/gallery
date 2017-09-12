@@ -56,6 +56,10 @@ use App\Core\App;
 		      }
 		   }
 		}
+		public function more()
+		{
+			return $images = App::get('database')->selectAll('images');
+		}
 	} 
 
 ?>
