@@ -3,9 +3,14 @@
 	<div>
 		<form method="POST" action = "/store" enctype="multipart/form-data">
 			<label>Upload an image</label>
-			<input type="file" name="fileToUpload" id="fileToUpload" accept="image/*">
+			<input type="file" name="fileToUpload" id="fileToUpload" accept="image/*" required>
+			<br>
+			<textarea name="tags" required >
+				
+			</textarea>
+			<br>
 			<button name = "submit">Upload</button>
-			<?php if($_GET['upload'] == 1) echo "Images Uploaded";?>
+			<?php if($_GET['upload'] == 1) echo "Image Uploaded";?>
 		</form>
 		<?php $count = 0; ?>
 		<div class="containers">
@@ -13,7 +18,10 @@
 			<tbody>
 				<tr>
 					<?php foreach ($images as $i): ?>
-						<td><img src="/public/uploads/<?php echo $i->filename; ?>"></td>
+						<td>
+							<img src="/public/uploads/<?php echo $i->filename; ?>">
+							<a href=""><?php echo $i->tags; ?></a>
+						</td>
 						<?php 
 							$count++; 
 							if($count == 5)
@@ -24,8 +32,10 @@
 				<tr>
 					<?php foreach ($images as $k => $v): ?>
 					<?php if ($k > $count - 1): ?>
-							<td><img src="/public/uploads/<?php echo $v->filename; ?>"></td>	
-
+							<td>
+								<img src="/public/uploads/<?php echo $v->filename; ?>">
+								<a href=""><?php echo $i->tags; ?></a>
+							</td>	
 							<?php 
 								$count++;
 								if($count == 10)
@@ -42,7 +52,10 @@
 			<tr>
 					<?php $total = $count + 5; foreach ($images as $k => $v): ?>
 					<?php if ($k > $count - 1): ?>
-							<td><img src="/public/uploads/<?php echo $v->filename; ?>"></td>	
+							<td>
+								<img src="/public/uploads/<?php echo $v->filename; ?>">
+								<a href=""><?php echo $i->tags; ?></a>
+							</td>	
 
 							<?php 
 								$count++;

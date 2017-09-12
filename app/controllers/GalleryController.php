@@ -11,6 +11,7 @@ use App\Core\App;
 		    if(isset($_FILES['fileToUpload']))
 		    {
 		    	$errors= array();
+		    	$tags = htmlentities($_POST['tags']);
 		      	$file_name = $_FILES['fileToUpload']['name'];
 		      	$file_size =$_FILES['fileToUpload']['size'];
 		      	$file_tmp  =$_FILES['fileToUpload']['tmp_name'];
@@ -44,6 +45,7 @@ use App\Core\App;
 		         	 'filesize'  => $file_size , 
 		         	 'width'     => $image_width,
 		         	 'height'    => $image_height,
+		         	 'tags'	     => $tags,
 		         	 ];
 		         	
 		         	App::get('database')->insert('images', $data );
